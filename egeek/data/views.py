@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .forms import uploadfile_form
 import pandas as pd
 from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data
@@ -6,6 +6,18 @@ import qrcode
 
 def main(request):
     return render(request, 'home.html')
+
+def detail(request,dorm, student_number):
+    print(dorm)
+    print(student_number)
+    if(dorm=="향1"):
+        dorm_= get_object_or_404(dorm1_data, student_number=student_number)
+    elif(dorm=="향2"):
+        dorm_= get_object_or_404(dorm2_data, student_number=student_number)
+    elif(dorm=="향3"):
+        dorm_= get_object_or_404(dorm3_data, student_number=student_number)
+
+    return render(request, 'detail.html', {'dorm_data' : dorm_})
 
 def upload_file(request):
     if request.method=="POST":
@@ -35,7 +47,8 @@ def excel_to_db(row):
         border=4,
     )
 
-    qr.add_data(main)
+    qr.add_data('http://127.0.0.1:8000/')
+    qr.add_data('detail/'+row[1][row[1].index[0]]+'/')
     qr.add_data(row[1][row[1].index[2]])
     img = qr.make_image(fill_color="white", back_color="black")
     dorm.qr_image=img.save('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
