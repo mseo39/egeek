@@ -13,6 +13,7 @@ class dorm1_data(models.Model):
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
     student_number=models.CharField(max_length=10)
+    qr_image=models.ImageField(null=True)
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
@@ -21,6 +22,7 @@ class dorm2_data(models.Model):
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
     student_number=models.CharField(max_length=10)
+    qr_image=models.ImageField(null=True)
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
@@ -29,6 +31,7 @@ class dorm3_data(models.Model):
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
     student_number=models.CharField(max_length=10)
+    qr_image=models.ImageField(null=True)
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number

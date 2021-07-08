@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from .forms import uploadfile_form
 import pandas as pd
 from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data
+import qrcode
 
-def data(request):
-    return render(request, 'main.html')
+def main(request):
+    return render(request, 'home.html')
 
 def upload_file(request):
     if request.method=="POST":
@@ -26,6 +27,19 @@ def excel_to_db(row):
     dorm.dorm=row[1][row[1].index[0]]
     dorm.dorm_number=row[1][row[1].index[1]]
     dorm.student_number=row[1][row[1].index[2]]
+
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+
+    qr.add_data(main)
+    qr.add_data(row[1][row[1].index[2]])
+    img = qr.make_image(fill_color="white", back_color="black")
+    dorm.qr_image=img.save('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
+    dorm.qr_image='qr/{}_qr.png'.format(row[1][row[1].index[2]])
     dorm.save()
             
 def select_file(request):
