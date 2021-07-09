@@ -8,15 +8,12 @@ def main(request):
     return render(request, 'home.html')
 
 def detail(request,dorm, student_number):
-    print(dorm)
-    print(student_number)
     if(dorm=="향1"):
         dorm_= get_object_or_404(dorm1_data, student_number=student_number)
     elif(dorm=="향2"):
         dorm_= get_object_or_404(dorm2_data, student_number=student_number)
     elif(dorm=="향3"):
         dorm_= get_object_or_404(dorm3_data, student_number=student_number)
-
     return render(request, 'detail.html', {'dorm_data' : dorm_})
 
 def upload_file(request):
@@ -69,3 +66,22 @@ def select_file(request):
     files=Uploadfile.objects.all()
     return render(request, 'file.html', {'files':files})
 
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def select_out(request, dorm):
+    if request.method=='POST':
+        student_number=request.POST['student_number']
+        select=request.POST['submit']
+
+        if(dorm=="향1"):
+            dorm_= get_object_or_404(dorm1_data, student_number=student_number)
+        elif(dorm=="향2"):
+            dorm_= get_object_or_404(dorm2_data, student_number=student_number)
+        elif(dorm=="향3"):
+            dorm_= get_object_or_404(dorm3_data, student_number=student_number)
+
+        if(select=="외출"):
+            return render(request, 'outing.html',{'dorm_data':dorm_})
+        else:
+            return render(request, 'overnight.html',{'dorm_data':dorm_})

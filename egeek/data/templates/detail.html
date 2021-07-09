@@ -1,3 +1,6 @@
-<p>{{dorm_data.dorm}}</p><br>
-<p>{{dorm_data.dorm_number}}</p><br>
-<p>{{dorm_data.student_number}}</p>
+<form method="POST" action="select_out">
+    {% csrf_token %}
+    <input type="hidden" name="student_number" value={{dorm_data.student_number}}>
+    <button type="submit" name="submit" value="외출">외출</button>
+    <button type="submit" name="submit" value="외박">외박</button>
+</form>
