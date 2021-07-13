@@ -1,0 +1,16 @@
+<h1>Login</h1>
+
+<h4>{{error}}</h4>
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %} <!--보안_난수 발생기_csrf를 방해하는 토큰-->
+        username:
+        <br>
+        <input name="username" type="text" value="">
+        <br>
+        Password:
+        <br>
+        <input name="password" type="password" value="">
+        <br>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Login">
+    </form>

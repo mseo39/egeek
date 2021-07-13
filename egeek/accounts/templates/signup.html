@@ -1,0 +1,27 @@
+<h1>sign up!</h1>
+
+<h4>{{error}}</h4>
+
+<form method="POST" action="{% url 'username_chk' %}">
+    {% csrf_token %} <!--보안_난수 발생기_csrf를 방해하는 토큰-->
+    username:
+    <br>
+    <input name="username" type="text" value={{username}}>
+    <br>
+    <input class="btn btn-primary" type="submit" value="Sign up!">
+</form>
+
+    <form method="POST" action="{% url 'signup' %}">
+        {% csrf_token %} <!--보안_난수 발생기_csrf를 방해하는 토큰-->
+        <input type="hidden"  name="username" type="text" value={{username}}>
+        Password:
+        <br>
+        <input name="password1" type="password" value="">
+        <br>
+        Confirm Password:
+        <br>
+        <input name="password2" type="password" value="">
+        <br>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Sign up!">
+    </form>
