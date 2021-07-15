@@ -12,7 +12,7 @@ def signup(request):
             #로그인하는 함수
             auth.login(request, user)
             return redirect('main') #성공하면 
-    return render(request,'signup.html', {'username':' '}) #실패하면
+    return render(request,'signup.html', {'username':' ', 'chk':'중복확인', 'able':'disabled'}) #실패하면
 
 def login(request):
     if request.method == 'POST': #정보를 전달하는 방식
@@ -37,10 +37,9 @@ def logout(request):
 def username_chk(request):
     if request.method == 'POST':
         username = request.POST['username']
-        user = auth.authenticate(request, username=username)
-        if user is not None: #있으면
-            return render(request, 'signup.html', {'error': 'ss', 'username':''})
-        else: #없으면
-            return render(request, 'signup.html', {'error': 'username or password is incorrect', 'username':username})
+        for f in User.objects.all():
+            if(f.username == username):
+                return render(request, 'signup.html', {'error': 'username이 중복됩니다', 'username':'', 'chk':'중복확인', 'able':'disabled'})
+        return render(request, 'signup.html', {'username':username, 'chk':'사용가능', 'able':''})
     else:
         return redirect('signup')
