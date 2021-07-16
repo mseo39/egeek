@@ -12,7 +12,7 @@
     <input class="btn btn-primary" type="submit" value="{{chk}}">
 </form>
 
-<form method="POST" action="{% url 'signup' %}">
+<form method="POST" action="{% url 'signup_apply' %}">
     {% csrf_token %}
     <!--보안_난수 발생기_csrf를 방해하는 토큰-->
     <input type="hidden" name="username" type="text" value={{username}}>

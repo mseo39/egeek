@@ -1,0 +1,9 @@
+<form method="POST" action="{% url 'signup' %}">
+    {% csrf_token %}
+    {% for manager in managers %}
+    <input type="checkbox" name="username[]" value={{manager.username}}>{{manager.username}}
+    <br/>
+    <input type="hidden" name="password[]" value={{manager.password}}>
+    {% endfor %}
+    <input type="submit" value="승인">
+</form>

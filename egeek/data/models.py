@@ -35,3 +35,9 @@ class dorm3_data(models.Model):
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
+
+class manager(models.Model):
+    username=models.CharField(max_length=10)
+    password=models.CharField(max_length=20)
+    def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
+        return self.username

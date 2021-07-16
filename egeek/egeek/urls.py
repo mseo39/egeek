@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import data.views
+import accounts.views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -27,4 +28,5 @@ urlpatterns = [
     path('upload_file', data.views.upload_file, name="upload_file"),
     path('select_file', data.views.select_file, name="select_file"),
     path('accounts/',include('accounts.urls')),
+    path('manager/', accounts.views.manager_, name="manager"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

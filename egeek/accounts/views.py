@@ -1,18 +1,25 @@
-from django.shortcuts import render, redirect,  get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
+from data.models import manager
 
 # Create your views here.
 
 def signup(request):
     if request.method == 'POST': #정보를 전달하는 방식
-        if request.POST['password1'] == request.POST['password2']: #비밀번호 확인
-            #유저를 만들어 줌
-            user = User.objects.create_user(username=request.POST['username'], password=request.POST['password1'])
-            #로그인하는 함수
-            auth.login(request, user)
-            return redirect('main') #성공하면 
-    return render(request,'signup.html', {'username':' ', 'chk':'중복확인', 'able':'disabled'}) #실패하면
+        username_list=request.POST.getlist('username[]')
+        password_list=request.POST.getlist('password[]')
+        manager_=manager()
+        print(username_list)
+        print(password_list)
+        #유저를 만들어 줌
+        for i, username in enumerate(username_list):
+            print(username)
+            print(password_list[i])
+            User.objects.create_user(username=username, password=password_list[i])
+            manager.objects.get(username=username).delete()
+        return redirect('manager')
+    return render(request, 'signup.html', {'username':'', 'chk':'중복확인', 'able':'disabled'})
 
 def login(request):
     if request.method == 'POST': #정보를 전달하는 방식
@@ -37,9 +44,24 @@ def logout(request):
 def username_chk(request):
     if request.method == 'POST':
         username = request.POST['username']
+        if(username==''):
+            return render(request, 'signup.html', {'error': 'username이 비어있습니다', 'username':'', 'chk':'중복확인', 'able':'disabled'}) 
         for f in User.objects.all():
             if(f.username == username):
                 return render(request, 'signup.html', {'error': 'username이 중복됩니다', 'username':'', 'chk':'중복확인', 'able':'disabled'})
         return render(request, 'signup.html', {'username':username, 'chk':'사용가능', 'able':''})
     else:
         return redirect('signup')
+
+def signup_apply(request):
+    if request.method == 'POST': #정보를 전달하는 방식
+        if request.POST['password1'] == request.POST['password2']: #비밀번호 확인
+            manager_=manager()
+            manager_.username=request.POST['username']
+            manager_.password=request.POST['password1']
+            manager_.save()
+    return redirect('main')
+
+def manager_(request):
+    manager_=manager.objects.all()
+    return render(request, 'manager.html', {'managers':manager_})
