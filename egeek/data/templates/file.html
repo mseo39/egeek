@@ -8,7 +8,7 @@
     <input type="submit" value="delete">
 </form>
 <br>
-<form method="POST" action="select_file">
+<form method="POST" action="delete_data">
     {% csrf_token %}
     {% for files in upload_files %}
     <input type="checkbox" name="file[]" value={{files.title}}>{{files.title}}

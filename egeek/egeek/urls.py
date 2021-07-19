@@ -27,6 +27,7 @@ urlpatterns = [
     path('detail/<str:dorm>/select_out',data.views.select_out, name="select_out"),
     path('upload_file', data.views.upload_file, name="upload_file"),
     path('select_file', data.views.select_file, name="select_file"),
+    path('delete_data', data.views.delete_data, name="delete_data"),
     path('accounts/',include('accounts.urls')),
     path('manager/', accounts.views.manager_, name="manager"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

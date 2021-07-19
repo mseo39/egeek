@@ -71,9 +71,19 @@ def select_file(request):
     upload_files=Uploadfile.objects.filter(chk=1)
     return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
 
-# def delete_data(request):
-#     if request.method=='POST':
-
+def delete_data(request):
+    if request.method=='POST':
+        chk_file=request.POST.getlist('file[]')
+        for file in chk_file:
+            dorm1_data.objects.filter(file_name=file).delete()
+            dorm2_data.objects.filter(file_name=file).delete()
+            dorm3_data.objects.filter(file_name=file).delete()
+            file_= get_object_or_404(Uploadfile, title=file)
+            file_.chk=0
+            file_.save()
+    not_upload_files=Uploadfile.objects.filter(chk=0)
+    upload_files=Uploadfile.objects.filter(chk=1)
+    return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
 
 from django.views.decorators.csrf import csrf_exempt
 
