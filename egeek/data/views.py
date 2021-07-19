@@ -26,7 +26,7 @@ def upload_file(request):
     file_form=uploadfile_form()
     return render(request, 'main.html', {'file_form':file_form})
 
-def excel_to_db(row):
+def excel_to_db(row,file):
     if(row[1][row[1].index[0]]=="향1"):
         dorm=dorm1_data()
     elif(row[1][row[1].index[0]]=="향2"):
@@ -36,6 +36,7 @@ def excel_to_db(row):
     dorm.dorm=row[1][row[1].index[0]]
     dorm.dorm_number=row[1][row[1].index[1]]
     dorm.student_number=row[1][row[1].index[2]]
+    dorm.file_name=file
 
     qr = qrcode.QRCode(
         version=1,
@@ -63,12 +64,16 @@ def select_file(request):
             df=pd.read_excel(directory, header=0)
 
             for row in df.iterrows():
-                excel_to_db(row)
+                excel_to_db(row, file)
 
         return redirect("select_file")
     not_upload_files=Uploadfile.objects.filter(chk=0)
     upload_files=Uploadfile.objects.filter(chk=1)
     return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
+
+# def delete_data(request):
+#     if request.method=='POST':
+
 
 from django.views.decorators.csrf import csrf_exempt
 
