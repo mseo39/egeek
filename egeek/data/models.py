@@ -5,6 +5,7 @@ from django.db import models
 class Uploadfile(models.Model):
     title=models.CharField(max_length=50)
     file=models.FileField(upload_to='file/')
+    chk=models.IntegerField(default=0,null=True)
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.title

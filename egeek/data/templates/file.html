@@ -1,8 +1,17 @@
 <form method="POST" action="select_file">
     {% csrf_token %}
-    {% for files in files %}
+    {% for files in not_upload_files %}
     <input type="checkbox" name="file[]" value={{files.title}}>{{files.title}}
     <br/>
     {% endfor %}
-    <input type="submit">
+    <input type="submit" value="upload">
+</form>
+<br>
+<form method="POST" action="select_file">
+    {% csrf_token %}
+    {% for files in upload_files %}
+    <input type="checkbox" name="file[]" value={{files.title}}>{{files.title}}
+    <br/>
+    {% endfor %}
+    <input type="submit" value="delete">
 </form>

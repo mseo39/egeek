@@ -56,6 +56,9 @@ def select_file(request):
     if request.method=="POST":
         chk_file=request.POST.getlist('file[]')
         for file in chk_file:
+            file_= get_object_or_404(Uploadfile, title=file)
+            file_.chk=1
+            file_.save()
             directory="media/file/{}.xlsx".format(file)
             df=pd.read_excel(directory, header=0)
 
@@ -63,8 +66,9 @@ def select_file(request):
                 excel_to_db(row)
 
         return redirect("select_file")
-    files=Uploadfile.objects.all()
-    return render(request, 'file.html', {'files':files})
+    not_upload_files=Uploadfile.objects.filter(chk=0)
+    upload_files=Uploadfile.objects.filter(chk=1)
+    return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
 
 from django.views.decorators.csrf import csrf_exempt
 
