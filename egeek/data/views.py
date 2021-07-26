@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import uploadfile_form
 import pandas as pd
-from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data
+from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data
 import qrcode
 
 def main(request):
@@ -14,6 +14,14 @@ def detail(request,dorm, student_number):
         dorm_= get_object_or_404(dorm2_data, student_number=student_number)
     elif(dorm=="향3"):
         dorm_= get_object_or_404(dorm3_data, student_number=student_number)
+    elif(dorm=="학성사1"):
+        dorm_= get_object_or_404(old_dorm1_data, student_number=student_number)
+    elif(dorm=="학성사2"):
+        dorm_= get_object_or_404(old_dorm2_data, student_number=student_number)
+    elif(dorm=="학성사3"):
+        dorm_= get_object_or_404(old_dorm3_data, student_number=student_number)
+    elif(dorm=="글로벌빌리지"):
+        dorm_= get_object_or_404(global_dorm_data, student_number=student_number)
     return render(request, 'detail.html', {'dorm_data' : dorm_})
 
 def upload_file(request):
@@ -33,6 +41,14 @@ def excel_to_db(row,file):
         dorm=dorm2_data()
     elif(row[1][row[1].index[0]]=="향3"):
         dorm=dorm3_data()
+    elif(row[1][row[1].index[0]]=="학성사1"):
+        dorm= old_dorm1_data()
+    elif(row[1][row[1].index[0]]=="학성사2"):
+        dorm=old_dorm2_data()
+    elif(row[1][row[1].index[0]]=="학성사3"):
+        dorm=old_dorm3_data()
+    elif(row[1][row[1].index[0]]=="글로벌빌리지"):
+        dorm=global_dorm_data()
     dorm.dorm=row[1][row[1].index[0]]
     dorm.dorm_number=row[1][row[1].index[1]]
     dorm.student_number=row[1][row[1].index[2]]
@@ -78,6 +94,10 @@ def delete_data(request):
             dorm1_data.objects.filter(file_name=file).delete()
             dorm2_data.objects.filter(file_name=file).delete()
             dorm3_data.objects.filter(file_name=file).delete()
+            old_dorm1_data.objects.filter(file_name=file).delete()
+            old_dorm2_data.objects.filter(file_name=file).delete()
+            old_dorm3_data.objects.filter(file_name=file).delete()
+            global_dorm_data.objects.filter(file_name=file).delete()
             file_= get_object_or_404(Uploadfile, title=file)
             file_.chk=0
             file_.save()
@@ -99,6 +119,14 @@ def select_out(request, dorm):
             dorm_= get_object_or_404(dorm2_data, student_number=student_number)
         elif(dorm=="향3"):
             dorm_= get_object_or_404(dorm3_data, student_number=student_number)
+        elif(dorm=="학성사1"):
+            dorm_= get_object_or_404(old_dorm1_data, student_number=student_number)
+        elif(dorm=="학성사2"):
+            dorm_= get_object_or_404(old_dorm2_data, student_number=student_number)
+        elif(dorm=="학성사3"):
+            dorm_= get_object_or_404(old_dorm3_data, student_number=student_number)
+        elif(dorm=="글로벌빌리지"):
+            dorm_= get_object_or_404(global_dorm_data, student_number=student_number)
 
         if(select=="외출"):
             return render(request, 'outing.html',{'dorm_data':dorm_})
