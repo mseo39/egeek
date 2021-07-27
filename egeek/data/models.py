@@ -86,3 +86,12 @@ class manager(models.Model):
     password=models.CharField(max_length=20)
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.username
+
+class overnight_stay(models.Model):
+    date=models.CharField(max_length=10)
+    student_number=models.IntegerField(max_length=8)
+    dorm=models.CharField(max_length=10)
+    dorm_number=models.CharField(max_length=10)
+
+    def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
+        return self.dorm_number
