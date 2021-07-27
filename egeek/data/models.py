@@ -89,7 +89,7 @@ class manager(models.Model):
 
 class overnight_stay(models.Model):
     date=models.CharField(max_length=10)
-    student_number=models.IntegerField(max_length=8)
+    student_number=models.IntegerField()
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
 

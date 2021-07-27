@@ -3,6 +3,8 @@ from .forms import uploadfile_form
 import pandas as pd
 from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data
 import qrcode
+from datetime import datetime
+import calendar
 
 def main(request):
     return render(request, 'home.html')
@@ -132,3 +134,23 @@ def select_out(request, dorm):
             return render(request, 'outing.html',{'dorm_data':dorm_})
         else:
             return render(request, 'overnight.html',{'dorm_data':dorm_})
+
+#외박 form
+def outing_stay(request):
+    if request.method=="POST":
+        chk_date=request.POST.getlist('date[]')
+        
+        return redirect("outing_stay")
+    days=[]
+    c= calendar.TextCalendar(calendar.SUNDAY)
+    for i in c.itermonthdays(datetime.today().year,datetime.today().month):
+        if i==0:
+            days.append(" ")
+        else:
+            days.append(i)
+
+    disable=["" for i in range(len(days))]
+    for i in range(0,len(days)):
+        if days[i] ==0:
+            disable[i]="disabled"
+    return render(request, 'form.html', {"days":days})

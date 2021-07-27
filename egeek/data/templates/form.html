@@ -1,0 +1,9 @@
+<form method="POST" action="{% url 'outing_stay' %}">
+    {% csrf_token %}
+    <br/>
+    {% for day in days %}
+    <input type="checkbox" name="date[]" value="{{day}}" {{disable}}>{{day}}
+    <br/>
+    {% endfor %}
+    <input type="submit" value="신청하기">
+</form>
