@@ -30,5 +30,5 @@ urlpatterns = [
     path('delete_data', data.views.delete_data, name="delete_data"),
     path('accounts/',include('accounts.urls')),
     path('manager/', accounts.views.manager_, name="manager"),
-    path('outing_stay',data.views.outing_stay, name="outing_stay")
+    path('overnight',data.views.overnight, name="overnight")
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import uploadfile_form
 import pandas as pd
-from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data
+from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data,overnight_stay
 import qrcode
 from datetime import datetime
 import calendar
@@ -9,7 +9,7 @@ import calendar
 def main(request):
     return render(request, 'home.html')
 
-def detail(request,dorm, student_number):
+def dorm_search(dorm, student_number):
     if(dorm=="향1"):
         dorm_= get_object_or_404(dorm1_data, student_number=student_number)
     elif(dorm=="향2"):
@@ -24,6 +24,10 @@ def detail(request,dorm, student_number):
         dorm_= get_object_or_404(old_dorm3_data, student_number=student_number)
     elif(dorm=="글로벌빌리지"):
         dorm_= get_object_or_404(global_dorm_data, student_number=student_number)
+    return dorm_
+
+def detail(request,dorm, student_number):
+    dorm_=dorm_search(dorm, student_number)
     return render(request, 'detail.html', {'dorm_data' : dorm_})
 
 def upload_file(request):
@@ -70,7 +74,7 @@ def excel_to_db(row,file):
     dorm.qr_image=img.save('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
     dorm.qr_image='qr/{}_qr.png'.format(row[1][row[1].index[2]])
     dorm.save()
-            
+
 def select_file(request):
     if request.method=="POST":
         chk_file=request.POST.getlist('file[]')
@@ -115,42 +119,37 @@ def select_out(request, dorm):
         student_number=request.POST['student_number']
         select=request.POST['submit']
 
-        if(dorm=="향1"):
-            dorm_= get_object_or_404(dorm1_data, student_number=student_number)
-        elif(dorm=="향2"):
-            dorm_= get_object_or_404(dorm2_data, student_number=student_number)
-        elif(dorm=="향3"):
-            dorm_= get_object_or_404(dorm3_data, student_number=student_number)
-        elif(dorm=="학성사1"):
-            dorm_= get_object_or_404(old_dorm1_data, student_number=student_number)
-        elif(dorm=="학성사2"):
-            dorm_= get_object_or_404(old_dorm2_data, student_number=student_number)
-        elif(dorm=="학성사3"):
-            dorm_= get_object_or_404(old_dorm3_data, student_number=student_number)
-        elif(dorm=="글로벌빌리지"):
-            dorm_= get_object_or_404(global_dorm_data, student_number=student_number)
+        dorm_=dorm_search(dorm, student_number)
+
+        days=[]
+        c= calendar.TextCalendar(calendar.SUNDAY)
+        for i in c.itermonthdays(datetime.today().year,datetime.today().month):
+            if i==0:
+                days.append(" ")
+            else:
+                days.append(i)
 
         if(select=="외출"):
             return render(request, 'outing.html',{'dorm_data':dorm_})
         else:
-            return render(request, 'overnight.html',{'dorm_data':dorm_})
+            return render(request, 'form.html',{'dorm_data':dorm_, "days":days})
 
 #외박 form
-def outing_stay(request):
+def overnight(request):
+    
     if request.method=="POST":
         chk_date=request.POST.getlist('date[]')
-        
-        return redirect("outing_stay")
-    days=[]
-    c= calendar.TextCalendar(calendar.SUNDAY)
-    for i in c.itermonthdays(datetime.today().year,datetime.today().month):
-        if i==0:
-            days.append(" ")
-        else:
-            days.append(i)
+        student_number= request.POST['student_number']
+        dorm_number= request.POST['dorm_number']
+        dorm= request.POST['dorm']
+        dorm_=dorm_search(dorm, student_number)
 
-    disable=["" for i in range(len(days))]
-    for i in range(0,len(days)):
-        if days[i] ==0:
-            disable[i]="disabled"
-    return render(request, 'form.html', {"days":days})
+        overnight=overnight_stay()
+        for i in chk_date:
+            overnight.date=i
+            overnight.dorm=dorm
+            overnight.dorm_number=dorm_number
+            overnight.student_number=student_number
+            overnight.save()
+
+    return render(request, 'result.html', {'dorm_data':dorm_})
