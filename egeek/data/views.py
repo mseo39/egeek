@@ -128,6 +128,10 @@ def select_out(request, dorm):
                 days.append(" ")
             else:
                 days.append(i)
+        disable=["" for i in range(len(days))]
+        for i in range(0,len(days)):
+            if days[i] ==0:
+                disable[i]="disabled"
 
         if(select=="외출"):
             return render(request, 'outing.html',{'dorm_data':dorm_})
@@ -146,7 +150,8 @@ def overnight(request):
 
         overnight=overnight_stay()
         for i in chk_date:
-            overnight.date=i
+            overnight.month=datetime.today().month
+            overnight.day=i
             overnight.dorm=dorm
             overnight.dorm_number=dorm_number
             overnight.student_number=student_number
