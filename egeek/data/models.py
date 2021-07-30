@@ -88,8 +88,8 @@ class manager(models.Model):
         return self.username
 
 class overnight_stay(models.Model):
-    month=models.IntegerField()
-    day=models.IntegerField()
+    month=models.IntegerField(default=0)
+    day=models.IntegerField(default=0)
     student_number=models.IntegerField()
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)

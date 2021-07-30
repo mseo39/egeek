@@ -120,23 +120,57 @@ def select_out(request, dorm):
         select=request.POST['submit']
 
         dorm_=dorm_search(dorm, student_number)
+        lists=overnight_stay.objects.filter(student_number=student_number)
 
         days=[]
         c= calendar.TextCalendar(calendar.SUNDAY)
-        for i in c.itermonthdays(datetime.today().year,datetime.today().month):
-            if i==0:
-                days.append(" ")
-            else:
-                days.append(i)
-        disable=["" for i in range(len(days))]
-        for i in range(0,len(days)):
-            if days[i] ==0:
-                disable[i]="disabled"
 
         if(select=="외출"):
             return render(request, 'outing.html',{'dorm_data':dorm_})
+        elif(select=="감소"):
+            month=int(request.POST['month'])-1
+            if(month<datetime.today().month):
+                month=datetime.today().month
+            for i in c.itermonthdays(datetime.today().year,month):
+                for j in lists:
+                    if(j.month==month and j.day==i):
+                        days.append([i,"disabled"])
+                        continue
+                if i==0:
+                    days.append([" ","disabled"])
+                else:
+                    days.append([i," "])
+
+            return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
+        
+        elif(select=="증가"):
+            month=int(request.POST['month'])+1
+            if(month==13):
+                month=12
+            for i in c.itermonthdays(datetime.today().year,month):
+                for j in lists:
+                    if(j.month==month and j.day==i):
+                        days.append([i,"disabled"])
+                        continue
+                if i==0:
+                    days.append([" ","disabled"])
+                else:
+                    days.append([i," "])
+
+            return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
         else:
-            return render(request, 'form.html',{'dorm_data':dorm_, "days":days})
+            month=datetime.today().month
+            for i in c.itermonthdays(datetime.today().year,month):
+                for j in lists:
+                    if(j.month==month and j.day==i):
+                        days.append([i,"disabled"])
+                        continue
+                if i==0:
+                    days.append([" ","disabled"])
+                else:
+                    days.append([i," "])
+
+            return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
 
 #외박 form
 def overnight(request):
@@ -144,16 +178,16 @@ def overnight(request):
     if request.method=="POST":
         chk_date=request.POST.getlist('date[]')
         student_number= request.POST['student_number']
-        dorm_number= request.POST['dorm_number']
         dorm= request.POST['dorm']
+        month= request.POST['month']
         dorm_=dorm_search(dorm, student_number)
 
         overnight=overnight_stay()
         for i in chk_date:
-            overnight.month=datetime.today().month
+            overnight.month=month
             overnight.day=i
             overnight.dorm=dorm
-            overnight.dorm_number=dorm_number
+            overnight.dorm_number=dorm_.dorm_number
             overnight.student_number=student_number
             overnight.save()
 
