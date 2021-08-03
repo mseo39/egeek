@@ -4,8 +4,8 @@
     <input type="checkbox" name="file[]" value={{files.title}}>{{files.title}}
     <br/>
     {% endfor %}
-    <input type="submit" value="upload">
-    <input type="submit" value="delete">
+    <input type="submit" name="submit" value="upload">
+    <input type="submit" name="submit" value="delete">
 </form>
 <br>
 <form method="POST" action="delete_data">

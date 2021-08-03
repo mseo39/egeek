@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import uploadfile_form
 import pandas as pd
-from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data,overnight_stay
+from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data, overnight_list,overnight_stay
 import qrcode
 from datetime import datetime
 import calendar
+import os
 
 def main(request):
     return render(request, 'home.html')
@@ -78,17 +79,23 @@ def excel_to_db(row,file):
 def select_file(request):
     if request.method=="POST":
         chk_file=request.POST.getlist('file[]')
+        select=request.POST['submit']
+
         for file in chk_file:
             file_= get_object_or_404(Uploadfile, title=file)
-            file_.chk=1
-            file_.save()
-            directory="media/file/{}.xlsx".format(file)
-            df=pd.read_excel(directory, header=0)
+            if select=="upload":
+                file_.chk=1
+                file_.save()
+                directory="media/file/{}.xlsx".format(file)
+                df=pd.read_excel(directory, header=0)
 
-            for row in df.iterrows():
-                excel_to_db(row, file)
+                for row in df.iterrows():
+                    excel_to_db(row, file)
+            elif select=="delete":
+                Uploadfile.objects.filter(title=file).delete()
 
         return redirect("select_file")
+        
     not_upload_files=Uploadfile.objects.filter(chk=0)
     upload_files=Uploadfile.objects.filter(chk=1)
     return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
@@ -121,12 +128,16 @@ def select_out(request, dorm):
 
         dorm_=dorm_search(dorm, student_number)
         lists=overnight_stay.objects.filter(student_number=student_number)
+        
+        if(dorm=="향1" or dorm=="향2" or dorm=="향3"):
+            overnight_stay.objects.filter(dorm=dorm, dorm_number=dorm_.dorm_number)
 
         days=[]
         c= calendar.TextCalendar(calendar.SUNDAY)
 
         if(select=="외출"):
             return render(request, 'outing.html',{'dorm_data':dorm_})
+        #외박form
         elif(select=="감소"):
             month=int(request.POST['month'])-1
             if(month<datetime.today().month):
@@ -173,6 +184,7 @@ def select_out(request, dorm):
             return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
 
 #외박 form
+#overnight_stay_month, day, dorm, Dorm_number
 def overnight(request):
     
     if request.method=="POST":
@@ -190,5 +202,23 @@ def overnight(request):
             overnight.dorm_number=dorm_.dorm_number
             overnight.student_number=student_number
             overnight.save()
+
+            count=overnight_stay.objects.filter(dorm=dorm, dorm_number=overnight.dorm_number, month=overnight.month,day=overnight.day).count()
+            list=overnight_list()
+            if (dorm=="향1" or dorm=="향2" or dorm=="향3" or dorm=="학성사2" or dorm=="글로벌빌리지"):
+                if count==2:
+                    list.month=month
+                    list.day=i
+                    list.dorm=dorm
+                    list.dorm_number=dorm_.dorm_number
+                    list.save()
+
+            elif(dorm=="학성사1" or dorm=="학성사3"):
+                if count==4:
+                    list.month=month
+                    list.day=i
+                    list.dorm=dorm
+                    list.dorm_number=dorm_.dorm_number
+                    list.save()
 
     return render(request, 'result.html', {'dorm_data':dorm_})

@@ -1,11 +1,17 @@
+from calendar import month
 from django.db import models
-
+import egeek.settings
+import os
 # Create your models here.
 
 class Uploadfile(models.Model):
     title=models.CharField(max_length=50)
     file=models.FileField(upload_to='file/')
     chk=models.IntegerField(default=0,null=True)
+
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.docfile.name))
+        super(Uploadfile,self).delete(*args,**kwargs)
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.title
@@ -91,6 +97,16 @@ class overnight_stay(models.Model):
     month=models.IntegerField(default=0)
     day=models.IntegerField(default=0)
     student_number=models.IntegerField()
+    dorm=models.CharField(max_length=10)
+    dorm_number=models.CharField(max_length=10)
+
+    def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
+        return self.dorm_number
+
+#기숙사명, 날짜, 호실
+class overnight_list(models.Model):
+    month=models.IntegerField()
+    day=models.IntegerField()
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
 
