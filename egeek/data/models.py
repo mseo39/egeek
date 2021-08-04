@@ -9,9 +9,10 @@ class Uploadfile(models.Model):
     file=models.FileField(upload_to='file/')
     chk=models.IntegerField(default=0,null=True)
 
-    def delete(self, *args, **kwargs):
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.docfile.name))
-        super(Uploadfile,self).delete(*args,**kwargs)
+    def delete(self, *args, **kargs):
+        if self.file:
+            os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.file.name))
+        super(Uploadfile, self).delete(*args, **kargs)
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.title
@@ -25,6 +26,11 @@ class dorm1_data(models.Model):
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
+    
+    def delete(self, *args, **kargs):
+        if self.qr_image:
+            os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image))
+            super(dorm1_data, self).delete(*args, **kargs)
 
 class dorm2_data(models.Model):
     dorm=models.CharField(max_length=10)

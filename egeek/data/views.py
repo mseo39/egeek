@@ -10,6 +10,7 @@ import os
 def main(request):
     return render(request, 'home.html')
 
+#데이터베이스에 칼럼 가져오기
 def dorm_search(dorm, student_number):
     if(dorm=="향1"):
         dorm_= get_object_or_404(dorm1_data, student_number=student_number)
@@ -31,6 +32,7 @@ def detail(request,dorm, student_number):
     dorm_=dorm_search(dorm, student_number)
     return render(request, 'detail.html', {'dorm_data' : dorm_})
 
+#학생들의 정보가 적혀있는 엑셀파일 업로드
 def upload_file(request):
     if request.method=="POST":
         form=uploadfile_form(request.POST, request.FILES)
@@ -41,6 +43,8 @@ def upload_file(request):
     file_form=uploadfile_form()
     return render(request, 'main.html', {'file_form':file_form})
 
+#엑셀에 있는 정보를 데이터베이스에 저장
+#링크, 기숙사명, 학번 정보를 가지고 있는 qr코드를 생성
 def excel_to_db(row,file):
     if(row[1][row[1].index[0]]=="향1"):
         dorm=dorm1_data()
@@ -83,6 +87,7 @@ def select_file(request):
 
         for file in chk_file:
             file_= get_object_or_404(Uploadfile, title=file)
+            print(file_.file)
             if select=="upload":
                 file_.chk=1
                 file_.save()
@@ -222,3 +227,6 @@ def overnight(request):
                     list.save()
 
     return render(request, 'result.html', {'dorm_data':dorm_})
+
+def overnight_list(request):
+    overnight=overnight_stay()
