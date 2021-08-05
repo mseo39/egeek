@@ -5,7 +5,7 @@ from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_dat
 import qrcode
 from datetime import datetime
 import calendar
-import os
+from django.contrib.auth.decorators import login_required
 
 def main(request):
     return render(request, 'home.html')
@@ -32,6 +32,7 @@ def detail(request,dorm, student_number):
     dorm_=dorm_search(dorm, student_number)
     return render(request, 'detail.html', {'dorm_data' : dorm_})
 
+@login_required(login_url='/accounts/login/')
 #학생들의 정보가 적혀있는 엑셀파일 업로드
 def upload_file(request):
     if request.method=="POST":
@@ -84,6 +85,7 @@ def excel_to_db(row,file):
     dorm.qr_image='qr/{}_qr.png'.format(row[1][row[1].index[2]])
     dorm.save()
 
+@login_required(login_url='/accounts/login/')
 def select_file(request):
     if request.method=="POST":
         chk_file=request.POST.getlist('file[]')
@@ -108,6 +110,7 @@ def select_file(request):
     upload_files=Uploadfile.objects.filter(chk=1)
     return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
 
+@login_required(login_url='/accounts/login/')
 def delete_data(request):
     if request.method=='POST':
         chk_file=request.POST.getlist('file[]')
@@ -230,6 +233,3 @@ def overnight(request):
                     list.save()
 
     return render(request, 'result.html', {'dorm_data':dorm_})
-
-def overnight_list(request):
-    overnight=overnight_stay()
