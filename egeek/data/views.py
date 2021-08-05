@@ -35,10 +35,14 @@ def detail(request,dorm, student_number):
 #학생들의 정보가 적혀있는 엑셀파일 업로드
 def upload_file(request):
     if request.method=="POST":
-        form=uploadfile_form(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("upload_file")
+        form=Uploadfile()
+        file=request.FILES['file']
+        title,i=str(file).split('.')
+        form.title=title
+        form.file=file
+        form.save()
+
+        return redirect("upload_file")
 
     file_form=uploadfile_form()
     return render(request, 'main.html', {'file_form':file_form})
@@ -87,17 +91,16 @@ def select_file(request):
 
         for file in chk_file:
             file_= get_object_or_404(Uploadfile, title=file)
-            print(file_.file)
             if select=="upload":
                 file_.chk=1
                 file_.save()
-                directory="media/file/{}.xlsx".format(file)
+                directory="media/{}".format(file_.file)
                 df=pd.read_excel(directory, header=0)
 
                 for row in df.iterrows():
                     excel_to_db(row, file)
             elif select=="delete":
-                Uploadfile.objects.filter(title=file).delete()
+                Uploadfile.objects.filter(title=file_.title).delete()
 
         return redirect("select_file")
         

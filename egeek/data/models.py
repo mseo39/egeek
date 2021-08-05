@@ -28,9 +28,9 @@ class dorm1_data(models.Model):
         return self.dorm_number
     
     def delete(self, *args, **kargs):
-        if self.qr_image:
-            os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image))
-            super(dorm1_data, self).delete(*args, **kargs)
+        super(dorm1_data, self).delete(*args, **kargs)
+        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
+        
 
 class dorm2_data(models.Model):
     dorm=models.CharField(max_length=10)
