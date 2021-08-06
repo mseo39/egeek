@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+  <html lang="ko">
+
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title></title>
+      <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  </head>
+
+  <body>
+      <header>
+        <div class="wrapper">
+            <img src="/static/images/logo1.jpg" alt="logo" width="350px">
+               <ul class="menu">
+                  <li><a href="{% url 'upload_file' %}" >파일 업로드</a></li>
+                  <li><a href="{% url 'select_file' %}" >파일 선택</a></li>
+                  <li><a href="{% url 'manager' %}">계정 선택</a></li>
+                  <li><a href="{% url 'logout' %}" type="submit" >로그아웃</a></li>
+               </ul>
+            </div>
+      </header>
+  </body>
+
+  </html>
