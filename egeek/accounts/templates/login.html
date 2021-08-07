@@ -1,16 +1,34 @@
-<h1>Login</h1>
+{% load static %}
+<!DOCTYPE html>
+  <html lang="ko">
 
-<h4>{{error}}</h4>
-    <form method="POST" action="{% url 'login' %}">
-        {% csrf_token %} <!--보안_난수 발생기_csrf를 방해하는 토큰-->
-        username:
-        <br>
-        <input name="username" type="text" value="">
-        <br>
-        Password:
-        <br>
-        <input name="password" type="password" value="">
-        <br>
-        <br>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title></title>
+      <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  </head>
+
+  <body>
+    <div class="box1">
+        
+        <div class="login-page">
+            <img src="/static/images/logo1.jpg" alt="logo" width="400px">
+            <div class="form">
+              <form class="login-form" method="POST" action="{% url 'login' %}">
+                <input name="username" type="text" value="학번입력">
+                <input name="password" type="password" value="비밀번호">
+                <input id="btn" type="submit" value="Login">
+                <h4>{{error}}</h4>
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+              </form>
+            </div>
+          </div>
+    </div>
+    
+   <!-- <div class="box2">
+        <img src="/static/images/img1.png" alt="img">
+  </div> -->
+</body>
+
+  </html>

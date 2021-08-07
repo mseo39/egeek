@@ -1,0 +1,95 @@
+h1 {
+    color: violet;
+}
+/* html{    background:url(http://thekitemap.com/images/feedback-img.jpg) no-repeat;
+    background-size: cover;
+    height:100%;
+  } */
+body {
+    background: #a2df81; 
+  } 
+
+.box1 {
+    width: 100%;
+    padding-top: 95px;
+}
+
+.form {
+    padding: 45px;
+}
+
+/* .box2{
+    float: right;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    height: 680px;
+    width: 596px;
+}
+
+.box2 img{
+    width: 118%;
+} */
+
+
+
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+    background-color: #ffffff;
+    width: 580px;
+    padding: 6% 0;
+    margin: auto;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 9px 23px 0 rgba(0, 0, 0, 0.24);
+    border: 1px;
+    border-radius: 0.5px;
+}
+.form {
+    position: relative;
+    z-index: 1;
+    max-width: 360px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #aaa9a9;
+}
+#btn {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #A6CE39;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+#btn:hover,.form button:active,.form button:focus {
+  background: #7fa31b;
+}
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 15px;
+}
+.form .message a {
+  color: #A6CE39;
+  text-decoration: none;
+}
+.form .register-form {
+  display: none;
+}
