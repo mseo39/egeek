@@ -31,7 +31,7 @@ def login(request):
             auth.login(request, user)
             return redirect('main')
         else: #없으면
-            return render(request, 'login.html', {'error': 'username or password is incorrect'})
+            return render(request, 'login.html', {'error': '아이디나 비밀번호가 틀립니다'})
     else:
         return render(request,'login.html') #실패하면
 
@@ -55,12 +55,18 @@ def username_chk(request):
 
 def signup_apply(request):
     if request.method == 'POST': #정보를 전달하는 방식
+        username = request.POST['username']
+        
         if request.POST['password1'] == request.POST['password2']: #비밀번호 확인
             manager_=manager()
             manager_.username=request.POST['username']
             manager_.password=request.POST['password1']
             manager_.save()
-    return redirect('main')
+            return render(request, 'signup.html', {'success': '가입이 완료되었습니다', 'username':'', 'chk':'중복확인', 'able':'disabled'}) 
+        else:
+            return render(request, 'signup.html', {'error': '비밀번호가 다릅니다', 'username':username, 'chk':'중복확인', 'able':'disabled'})
+    return username_chk(request)
+    
 
 def manager_(request):
     manager_=manager.objects.all()
