@@ -37,16 +37,20 @@ def detail(request,dorm, student_number):
 def upload_file(request):
     if request.method=="POST":
         form=Uploadfile()
-        file=request.FILES['file']
-        title,i=str(file).split('.')
-        form.title=title
-        form.file=file
-        form.save()
+        if request.FILES['file'] is not None:
+            return redirect('main')
+        else:
+            file=request.FILES['file']
 
-        return redirect("upload_file")
+            title,i=str(file).split('.')
+            form.title=title
+            form.file=file
+            form.save()
+
+            return redirect("upload_file")
 
     file_form=uploadfile_form()
-    return render(request, 'main.html', {'file_form':file_form})
+    return render(request, 'main.html', {'file_form':file_form, 'dis':'disabled'})
 
 #엑셀에 있는 정보를 데이터베이스에 저장
 #링크, 기숙사명, 학번 정보를 가지고 있는 qr코드를 생성

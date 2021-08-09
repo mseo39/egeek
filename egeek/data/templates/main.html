@@ -1,5 +1,16 @@
-<form method="POST" enctype="multipart/form-data" action="upload_file">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}파일 업로드{% endblock %}
+{% block link %}{% static 'css/main.css' %}{% endblock %}
+
+{% block content %}
+<div class="form">
+<form class="upload_form" method="POST" enctype="multipart/form-data" action="upload_file">
     {% csrf_token %}
-    <input type="file" name="file">
+    <input id="file" type="file" name="file" value=" " accept=".xlsx, .xlsm, .xlsb, .xltm, .xlam, .xltx">
+    <br>
     <input type="submit">
 </form>
+</div>
+{% endblock %}
