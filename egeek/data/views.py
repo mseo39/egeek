@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 def main(request):
     return render(request, 'home.html')
 
+def error(request):
+    return render(request, 'error.html')
+
 #데이터베이스에 칼럼 가져오기
 def dorm_search(dorm, student_number):
     if(dorm=="향1"):
