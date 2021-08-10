@@ -1,18 +1,39 @@
-<form method="POST" action="select_file">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}파일 업로드{% endblock %}
+{% block link %}{% static 'css/file.css' %}{% endblock %}
+
+{% block content %}
+<div class="form">
+    <div class="form1">
+
+<form class="upload_form" method="POST" action="select_file">
     {% csrf_token %}
+    <div class="scroll">
     {% for files in not_upload_files %}
-    <input type="checkbox" name="file[]" value={{files.title}}>{{files.title}}
+    <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.title}}>
+    <label>{{files.title}}</label>
     <br/>
     {% endfor %}
-    <input type="submit" name="submit" value="upload">
-    <input type="submit" name="submit" value="delete">
+</div>
+    <input type="submit" name="submit" value="데이터 올리기">
+    <input type="submit" name="submit" value="파일 삭제">
 </form>
-<br>
-<form method="POST" action="delete_data">
+
+
+<form class="upload_form1" method="POST" action="delete_data">
     {% csrf_token %}
+    <div class="scroll1">
     {% for files in upload_files %}
-    <input type="checkbox" name="file[]" value={{files.title}}>{{files.title}}
+    <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.title}}>
+    <label>{{files.title}}</label>
     <br/>
     {% endfor %}
-    <input type="submit" value="delete">
+</div>
+    <input id="submit" type="submit" value="데이터 삭제">
 </form>
+
+</div>
+</div>
+{% endblock %}
