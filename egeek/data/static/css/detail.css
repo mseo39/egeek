@@ -1,0 +1,109 @@
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:url(../images/img3.jpg) no-repeat;
+
+}
+
+button {
+    font-family: 'GmarketSansMedium';
+    background-color: #95C51B;
+    font-size: 20px;
+    border: 0.1em solid #95C51B;
+    border-radius: 0.5em;
+    font-weight: bold;
+    width: 9em;
+    height: 7em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 3em;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: 1s;
+    margin: 1em;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 9px 23px 0 rgba(0, 0, 0, 0.24);
+}
+
+button span {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    background-color: white;
+    transform: translateY(150%);
+    border-radius: 50%;
+    left: calc((var(--n) - 1) * 25%);
+    transition: 0.8s;
+    transition-delay: calc((var(--n) - 1) * 0.1s);
+    z-index: -1;
+}
+
+button {
+    color: #95C51B;
+}
+
+button:hover {
+    color: white;
+}
+
+button span {
+    transform: translateY(0) scale(2);
+}
+
+button:hover span {
+    transform: translateY(0) scale(2);
+    background-color: #95C51B;
+}
+
+button span:nth-child(1) {
+    --n: 1;
+}
+
+button span:nth-child(2) {
+    --n: 2;
+}
+
+button span:nth-child(3) {
+    --n: 3;
+}
+
+button span:nth-child(4) {
+    --n: 4;
+}
+
+
+/* @media (max-width: 767px){
+	body{
+        background:url(../images/img3.jpg) no-repeat;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    body{
+        background-color: rgb(204, 32, 32);
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    body{
+        background-color: rgb(151, 179, 31);
+    }
+}
+
+@media (min-width: 1200px) {
+    body{
+        background-color: rgb(22, 33, 138);
+    }
+} */

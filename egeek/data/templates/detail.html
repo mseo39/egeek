@@ -1,6 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+  <html lang="ko">
+
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  </head>
+
+  <body>
+
+<div class="form">
 <form method="POST" action="select_out">
     {% csrf_token %}
     <input type="hidden" name="student_number" value={{dorm_data.student_number}}>
-    <button type="submit" name="submit" value="외출">외출</button>
-    <button type="submit" name="submit" value="외박">외박</button>
+    <button type="submit" name="submit" value="외출">외출<span></span><span></span><span></span><span></span></button>
+    <button type="submit" name="submit" value="외박">외박<span></span><span></span><span></span><span></span></button>
 </form>
+</div>
+</body>
