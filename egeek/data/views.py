@@ -40,17 +40,12 @@ def detail(request,dorm, student_number):
 def upload_file(request):
     if request.method=="POST":
         form=Uploadfile()
-        if request.FILES['file'] is not None:
-            return redirect('main')
-        else:
-            file=request.FILES['file']
+        file=request.FILES['file']
 
-            title,i=str(file).split('.')
-            form.title=title
-            form.file=file
-            form.save()
-
-            return redirect("upload_file")
+        title,i=str(file).split('.')
+        form.title=title
+        form.file=file
+        form.save()
 
     file_form=uploadfile_form()
     return render(request, 'main.html', {'file_form':file_form, 'dis':'disabled'})
@@ -91,7 +86,7 @@ def excel_to_db(row,file):
     dorm.qr_image=img.save('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
     dorm.qr_image='qr/{}_qr.png'.format(row[1][row[1].index[2]])
     dorm.save()
-
+import os
 @login_required(login_url='/accounts/login/')
 def select_file(request):
     if request.method=="POST":
@@ -99,17 +94,21 @@ def select_file(request):
         select=request.POST['submit']
 
         for file in chk_file:
-            file_= get_object_or_404(Uploadfile, title=file)
-            if select=="upload":
+            print(file)
+            file_= get_object_or_404(Uploadfile, file=file)
+            if select=="데이터 올리기":
                 file_.chk=1
                 file_.save()
                 directory="media/{}".format(file_.file)
+                print(file_.file)
+                print(file)
                 df=pd.read_excel(directory, header=0)
 
                 for row in df.iterrows():
-                    excel_to_db(row, file)
-            elif select=="delete":
-                Uploadfile.objects.filter(title=file_.title).delete()
+                    excel_to_db(row, file_.file)
+            elif select=="파일 삭제":
+                Uploadfile.objects.filter(file=file_.file).delete()
+                #os.remove(media.file+file)
 
         return redirect("select_file")
         
@@ -122,6 +121,7 @@ def delete_data(request):
     if request.method=='POST':
         chk_file=request.POST.getlist('file[]')
         for file in chk_file:
+            print(file)
             dorm1_data.objects.filter(file_name=file).delete()
             dorm2_data.objects.filter(file_name=file).delete()
             dorm3_data.objects.filter(file_name=file).delete()
@@ -129,7 +129,7 @@ def delete_data(request):
             old_dorm2_data.objects.filter(file_name=file).delete()
             old_dorm3_data.objects.filter(file_name=file).delete()
             global_dorm_data.objects.filter(file_name=file).delete()
-            file_= get_object_or_404(Uploadfile, title=file)
+            file_= get_object_or_404(Uploadfile, file=file)
             file_.chk=0
             file_.save()
     not_upload_files=Uploadfile.objects.filter(chk=0)

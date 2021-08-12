@@ -12,7 +12,7 @@
     {% csrf_token %}
     <div class="scroll">
     {% for files in not_upload_files %}
-    <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.title}}>
+    <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.file}}>
     <label>{{files.title}}</label>
     <br/>
     {% endfor %}
@@ -26,7 +26,7 @@
     {% csrf_token %}
     <div class="scroll1">
     {% for files in upload_files %}
-    <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.title}}>
+    <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.file}}>
     <label>{{files.title}}</label>
     <br/>
     {% endfor %}
