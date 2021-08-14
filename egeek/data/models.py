@@ -42,10 +42,6 @@ class dorm2_data(models.Model):
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
 
-    def delete(self, *args, **kargs):
-        super(dorm2_data, self).delete(*args, **kargs)
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
-
 class dorm3_data(models.Model):
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
@@ -55,11 +51,6 @@ class dorm3_data(models.Model):
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
-
-    def delete(self, *args, **kargs):
-        super(dorm3_data, self).delete(*args, **kargs)
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
-
 #학성사
 class old_dorm1_data(models.Model):
     dorm=models.CharField(max_length=10)
@@ -71,10 +62,6 @@ class old_dorm1_data(models.Model):
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
 
-    def delete(self, *args, **kargs):
-        super(old_dorm1_data, self).delete(*args, **kargs)
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
-
 class old_dorm2_data(models.Model):
     dorm=models.CharField(max_length=10)
     dorm_number=models.CharField(max_length=10)
@@ -84,10 +71,6 @@ class old_dorm2_data(models.Model):
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
-
-    def delete(self, *args, **kargs):
-        super(old_dorm2_data, self).delete(*args, **kargs)
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
 
 class old_dorm3_data(models.Model):
     dorm=models.CharField(max_length=10)
@@ -99,10 +82,6 @@ class old_dorm3_data(models.Model):
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
 
-    def delete(self, *args, **kargs):
-        super(old_dorm3_data, self).delete(*args, **kargs)
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
-
 #글로벌빌리지
 class global_dorm_data(models.Model):
     dorm=models.CharField(max_length=10)
@@ -113,10 +92,6 @@ class global_dorm_data(models.Model):
 
     def __str__(self): #제목에 오브젝트가 아니라 이름이 나오도록
         return self.dorm_number
-
-    def delete(self, *args, **kargs):
-        super(global_dorm_data, self).delete(*args, **kargs)
-        os.remove(os.path.join(egeek.settings.MEDIA_ROOT, self.qr_image.path))
 
 class manager(models.Model):
     username=models.CharField(max_length=10)
