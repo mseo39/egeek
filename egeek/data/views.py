@@ -94,21 +94,18 @@ def select_file(request):
         select=request.POST['submit']
 
         for file in chk_file:
-            print(file)
             file_= get_object_or_404(Uploadfile, file=file)
             if select=="데이터 올리기":
                 file_.chk=1
                 file_.save()
                 directory="media/{}".format(file_.file)
-                print(file_.file)
-                print(file)
                 df=pd.read_excel(directory, header=0)
 
                 for row in df.iterrows():
                     excel_to_db(row, file_.file)
             elif select=="파일 삭제":
                 Uploadfile.objects.filter(file=file_.file).delete()
-                #os.remove(media.file+file)
+                os.remove("media/{}".format(file_.file))
 
         return redirect("select_file")
         
@@ -116,19 +113,29 @@ def select_file(request):
     upload_files=Uploadfile.objects.filter(chk=1)
     return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
 
+def delete(dorm):
+    for i in dorm:
+        i.delete()
+
 @login_required(login_url='/accounts/login/')
 def delete_data(request):
     if request.method=='POST':
         chk_file=request.POST.getlist('file[]')
         for file in chk_file:
-            print(file)
-            dorm1_data.objects.filter(file_name=file).delete()
-            dorm2_data.objects.filter(file_name=file).delete()
-            dorm3_data.objects.filter(file_name=file).delete()
-            old_dorm1_data.objects.filter(file_name=file).delete()
-            old_dorm2_data.objects.filter(file_name=file).delete()
-            old_dorm3_data.objects.filter(file_name=file).delete()
-            global_dorm_data.objects.filter(file_name=file).delete()
+            dorm1=dorm1_data.objects.filter(file_name=file)
+            delete(dorm1)
+            dorm2=dorm2_data.objects.filter(file_name=file)
+            delete(dorm2)
+            dorm3=dorm3_data.objects.filter(file_name=file)
+            delete(dorm3)
+            old_dorm1=old_dorm1_data.objects.filter(file_name=file)
+            delete(old_dorm1)
+            old_dorm2=old_dorm2_data.objects.filter(file_name=file)
+            delete(old_dorm2)
+            old_dorm3=old_dorm3_data.objects.filter(file_name=file)
+            delete(old_dorm3)
+            global_dorm=global_dorm_data.objects.filter(file_name=file)
+            delete(global_dorm)
             file_= get_object_or_404(Uploadfile, file=file)
             file_.chk=0
             file_.save()
