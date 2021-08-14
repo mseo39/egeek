@@ -7,6 +7,8 @@ from datetime import datetime
 import calendar
 from django.contrib.auth.decorators import login_required
 
+#테스트
+
 def main(request):
     return render(request, 'home.html')
 
