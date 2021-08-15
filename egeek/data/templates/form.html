@@ -1,3 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+  <html lang="ko">
+
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="{% static 'css/form.css' %}">
+  </head>
+
+  <body>
+
 <form method="POST" action="{% url 'select_out' dorm_data.dorm %}">
     {% csrf_token %}
     <button type="submit" name="submit" value="감소">감소</button>
@@ -7,15 +19,20 @@
     <input type="hidden" name="month" value={{month}}>
 </form>
 
-<form method="POST" action="{% url 'overnight' %}">
+<form class="form" method="POST" action="{% url 'overnight' %}">
     {% csrf_token %}
-    <br/>
+    <div class="seats">
     {% for day in days %}
-    <input type="checkbox" name="date[]" value="{{day.0}}" {{day.1}}>{{day.0}}
-    <input type="hidden" name="month" value={{month}}>
+    <div class="seat">
+    <input type="checkbox" name="date[]" value="{{day.0}}" {{day.1}}>
+    <label for="{{day.0}}">{{day.0}}</label> 
+</div>
+    {% endfor %}
+</div> 
+<input type="hidden" name="month" value={{month}}>
     <input type="hidden" name="student_number" value={{dorm_data.student_number}}>
     <input type="hidden" name="dorm" value={{dorm_data.dorm}}>
-    <br/>
-    {% endfor %}
     <input type="submit" name="submit" value="신청하기">
 </form>
+
+</body>
