@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import login_required
 def main(request):
     return render(request, 'home.html')
 
-def error(request):
-    return render(request, 'error.html')
+def ss(request):
+    return render(request, 'ss.html')
 
 #데이터베이스에 칼럼 가져오기
 def dorm_search(dorm, student_number):
@@ -171,10 +171,6 @@ def select_out(request, dorm):
             if(month<datetime.today().month):
                 month=datetime.today().month
             for i in c.itermonthdays(datetime.today().year,month):
-                for j in lists:
-                    if(j.month==month and j.day==i):
-                        days.append([i,"disabled"])
-                        continue
                 if i==0:
                     days.append([" ","disabled"])
                 else:
@@ -187,10 +183,7 @@ def select_out(request, dorm):
             if(month==13):
                 month=12
             for i in c.itermonthdays(datetime.today().year,month):
-                for j in lists:
-                    if(j.month==month and j.day==i):
-                        days.append([i,"disabled"])
-                        continue
+                
                 if i==0:
                     days.append([" ","disabled"])
                 else:
@@ -200,10 +193,6 @@ def select_out(request, dorm):
         else:
             month=datetime.today().month
             for i in c.itermonthdays(datetime.today().year,month):
-                for j in lists:
-                    if(j.month==month and j.day==i):
-                        days.append([i,"disabled"])
-                        continue
                 if i==0:
                     days.append([" ","disabled"])
                 else:
@@ -222,8 +211,9 @@ def overnight(request):
         month= request.POST['month']
         dorm_=dorm_search(dorm, student_number)
 
-        overnight=overnight_stay()
+        
         for i in chk_date:
+            overnight=overnight_stay()
             overnight.month=month
             overnight.day=i
             overnight.dorm=dorm

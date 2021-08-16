@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', data.views.main, name="main"),
+    path('', data.views.ss, name="ss"),
     path('detail/<str:dorm>/<int:student_number>',data.views.detail, name="detail"),
     path('detail/<str:dorm>/select_out',data.views.select_out, name="select_out"),
     path('upload_file', data.views.upload_file, name="upload_file"),
@@ -31,5 +31,4 @@ urlpatterns = [
     path('accounts/',include('accounts.urls')),
     path('manager/', accounts.views.manager_, name="manager"),
     path('overnight',data.views.overnight, name="overnight"),
-    path('error/', data.views.error, name="error"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

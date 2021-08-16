@@ -6,10 +6,11 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="{% static 'css/form.css' %}">
-  </head>
+  
+ </head>
 
   <body>
-
+<div class="form">
 <form method="POST" action="{% url 'select_out' dorm_data.dorm %}">
     {% csrf_token %}
     <button type="submit" name="submit" value="감소">감소</button>
@@ -19,20 +20,22 @@
     <input type="hidden" name="month" value={{month}}>
 </form>
 
-<form class="form" method="POST" action="{% url 'overnight' %}">
+<form method="POST" action="{% url 'overnight' %}">
+    <p>{{dorm_data.student_number}}</p>
+    <p>{{dorm_data.dorm}} : {{dorm_data.dorm_number}}</p>
     {% csrf_token %}
     <div class="seats">
     {% for day in days %}
-    <div class="seat">
-    <input type="checkbox" name="date[]" value="{{day.0}}" {{day.1}}>
-    <label for="{{day.0}}">{{day.0}}</label> 
-</div>
+        <div class="seat">
+        <input type="checkbox" name="date[]" id="{{day.0}}" name="{{day.0}}" value="{{day.0}}"  {{day.1}}>
+        <label for="{{day.0}}">{{day.0}}</label> 
+        </div>
     {% endfor %}
-</div> 
-<input type="hidden" name="month" value={{month}}>
+    </div> 
+    <input type="hidden" name="month" value={{month}}>
     <input type="hidden" name="student_number" value={{dorm_data.student_number}}>
     <input type="hidden" name="dorm" value={{dorm_data.dorm}}>
     <input type="submit" name="submit" value="신청하기">
 </form>
-
+</div>
 </body>
