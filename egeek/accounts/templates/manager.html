@@ -1,9 +1,23 @@
-<form method="POST" action="{% url 'signup' %}">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}파일 업로드{% endblock %}
+{% block link %}{% static 'css/manager.css' %}{% endblock %}
+
+{% block content %}
+<div class="background">
+<form class="upload_form" method="POST" action="{% url 'signup' %}">
     {% csrf_token %}
+    <div class="form">
+    <div class="scroll">
     {% for manager in managers %}
-    <input type="checkbox" name="username[]" value={{manager.username}}>{{manager.username}}
+    <input class="option-input checkbox" type="checkbox" name="username[]" value={{manager.username}}>{{manager.username}}
     <br/>
     <input type="hidden" name="password[]" value={{manager.password}}>
     {% endfor %}
+</div>
+</div>
     <input type="submit" value="승인">
 </form>
+</div>
+{% endblock %}

@@ -8,12 +8,9 @@ import calendar
 from django.contrib.auth.decorators import login_required
 
 #테스트
-
+@login_required(login_url='/accounts/login/')
 def main(request):
     return render(request, 'home.html')
-
-def ss(request):
-    return render(request, 'ss.html')
 
 #데이터베이스에 칼럼 가져오기
 def dorm_search(dorm, student_number):
@@ -239,4 +236,4 @@ def overnight(request):
                     list.dorm_number=dorm_.dorm_number
                     list.save()
 
-    return render(request, 'result.html', {'dorm_data':dorm_})
+    return render(request, 'result.html', {'dorm_data':dorm_, 'date':chk_date, 'month': month})
