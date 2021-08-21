@@ -13,12 +13,12 @@
     <div class="box1">
         
         <div class="login-page">
-            <img src="/static/images/logo1.jpg" alt="logo" width="400px">
+            <img src="/static/images/logo1.jpg" alt="logo" width="350px">
             <div class="form">
                 
               <form class="login-form" method="POST" action="{% url 'login' %}">
-             {% csrf_token %}   <input name="username" type="text" value="아이디입력">
-                <input name="password" type="password" value="비밀번호">
+             {% csrf_token %}   <input name="username" type="text" value="" placeholder="아이디 입력">
+                <input name="password" type="password" value="" placeholder="비밀번호">
                 <input id="btn" type="submit" value="로그인">
                 <h4>{{error}}</h4>
                 <p class="message">Not registered? <a href="{% url 'signup' %}">Create an account</a></p>

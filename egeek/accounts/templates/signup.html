@@ -13,21 +13,19 @@
     <div class="box1">
         
         <div class="login-page">
-            <img src="/static/images/logo1.jpg" alt="logo" width="400px">
+            <img src="/static/images/logo1.jpg" alt="logo" width="350px">
             <div class="form" >
               <form class="login-form" method="POST" action="{% url 'username_chk' %}">
                 {% csrf_token %}
-                <input id="username" name="username" type="text" value={{username}}>
+                <input id="username" name="username" type="text" value="{{username}}" placeholder="아이디">
                 <input id="btn1" type="submit" value="{{chk}}">
               </form>
               <form method="POST" action="{% url 'signup_apply' %}">
                 {% csrf_token %}
                 <!--보안_난수 발생기_csrf를 방해하는 토큰-->
-                <input type="hidden" name="username" type="text" value={{username}}>
-                <p class="password">비밀번호 입력</p>
-                <input name="password1" type="password" value="">
-                <p class="password">비밀번호 확인</p>
-                <input name="password2" type="password" value="">
+                <input type="hidden" name="username" type="text" value={{username}}> 
+                <input name="password1" type="password" value="" placeholder="비밀번호 입력">
+                <input name="password2" type="password" value="" placeholder="비밀번호 확인">
                 <input id="btn" type="submit" value="회원가입" {{able}}>
                 </form>
                 
