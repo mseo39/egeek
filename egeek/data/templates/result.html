@@ -1,9 +1,32 @@
-{{dorm_data.dorm}}
-{{dorm_data.dorm_number}}
-{{dorm_data.student_number}}
+{% load static %}
+<!DOCTYPE html>
+  <html lang="ko">
 
-{% for day in date %}
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="{% static 'css/result.css' %}">
+      <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  </head>
 
-{{month}} : {{day}}
+  <body>
+    <div id="overlay"></div>  
+    <div id="container" id="timer">
+      <div id="circle">
+        <i class="fa fa-check"></i> 
+      </div> 
+      <h1>Success</h1>
+      <p>
+    {{dorm_data.dorm}} : 
+    {{dorm_data.dorm_number}} : 
+    {{dorm_data.student_number}}
+</p>
 
-{% endfor %}
+    {% for day in date %}
+
+        <p>{{month}}월 {{day}}일</p>
+
+    {% endfor %}
+
+</div>
+</body>
