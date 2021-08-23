@@ -167,35 +167,78 @@ def select_out(request, dorm):
             month=int(request.POST['month'])-1
             if(month<datetime.today().month):
                 month=datetime.today().month
-            for i in c.itermonthdays(datetime.today().year,month):
-                if i==0:
-                    days.append([" ","disabled"])
-                else:
-                    days.append([i," "])
-
-            return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
         
         elif(select=="증가"):
             month=int(request.POST['month'])+1
             if(month==13):
                 month=12
-            for i in c.itermonthdays(datetime.today().year,month):
-                
-                if i==0:
-                    days.append([" ","disabled"])
-                else:
-                    days.append([i," "])
 
-            return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
         else:
             month=datetime.today().month
-            for i in c.itermonthdays(datetime.today().year,month):
-                if i==0:
-                    days.append([" ","disabled"])
-                else:
-                    days.append([i," "])
+            
+        for i in c.itermonthdays(datetime.today().year,month):
+            if i==0:
+                days.append([" ","disabled"])
+            else:
+                days.append([i," "])
 
-            return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
+        already=overnight_stay.objects.filter(month=month)
+        index=0
+        while(i!=0):
+            index=index+1
+        for j in already:
+            days[index+j.day-1][1]="disabled"
+
+        return render(request, 'form.html',{'dorm_data':dorm_, "days":days, "month":month})
+
+@csrf_exempt
+def delete_date(request, dorm):
+    if request.method=='POST':
+        student_number=request.POST['student_number']
+        select=request.POST['submit']
+
+        dorm_=dorm_search(dorm, student_number)
+        
+        if(dorm=="향1" or dorm=="향2" or dorm=="향3"):
+            overnight_stay.objects.filter(dorm=dorm, dorm_number=dorm_.dorm_number)
+
+        days=[]
+        c= calendar.TextCalendar(calendar.SUNDAY)
+
+        if(select=="외출"):
+            return render(request, 'outing.html',{'dorm_data':dorm_})
+        #외박form
+        elif(select=="감소"):
+            month=int(request.POST['month'])-1
+            if(month<datetime.today().month):
+                month=datetime.today().month
+        
+        elif(select=="증가"):
+            month=int(request.POST['month'])+1
+            if(month==13):
+                month=12
+
+        else:
+            month=datetime.today().month
+            
+        c=c.itermonthdays(datetime.today().year,month)
+        for i in c:
+            if i==0:
+                days.append([" ","disabled"])
+            else:
+                days.append([i,"disabled"])
+        
+        
+
+        already=overnight_stay.objects.filter(month=month)
+        
+        index=0
+        while(i!=0):
+            index=index+1
+        for j in already:
+            days[index+j.day-1][1]=" "
+
+        return render(request, 'form_delete.html',{'dorm_data':dorm_, "days":days, "month":month})
 
 #외박 form
 #overnight_stay_month, day, dorm, Dorm_number
@@ -208,25 +251,33 @@ def overnight(request):
         month= request.POST['month']
         dorm_=dorm_search(dorm, student_number)
 
+        select=request.POST['submit']
         
-        for i in chk_date:
-            overnight=overnight_stay()
-            overnight.month=month
-            overnight.day=i
-            overnight.dorm=dorm
-            overnight.dorm_number=dorm_.dorm_number
-            overnight.student_number=student_number
-            overnight.save()
+        if select=="신청하기":
+        
+            for i in chk_date:
+                overnight=overnight_stay()
+                overnight.month=month
+                overnight.day=i
+                overnight.dorm=dorm
+                overnight.dorm_number=dorm_.dorm_number
+                overnight.student_number=student_number
+                overnight.save()
 
-            count=overnight_stay.objects.filter(dorm=dorm, dorm_number=overnight.dorm_number, month=overnight.month,day=overnight.day).count()
-            list=overnight_list()
-            if (dorm=="향1" or dorm=="향2" or dorm=="향3" or dorm=="학성사2" or dorm=="글로벌빌리지"):
-                if count==2:
-                    list.month=month
-                    list.day=i
-                    list.dorm=dorm
-                    list.dorm_number=dorm_.dorm_number
-                    list.save()
+        elif select=="취소하기":
+            for i in chk_date:
+                overnight_stay.objects.filter(dorm=dorm, dorm_number=dorm_.dorm_number, month=month,day=i).delete()
+
+
+        count=overnight_stay.objects.filter(dorm=dorm, dorm_number=dorm_.dorm_number, month=month,day=i).count()
+        list=overnight_list()
+        if (dorm=="향1" or dorm=="향2" or dorm=="향3" or dorm=="학성사2" or dorm=="글로벌빌리지"):
+            if count==2:
+                list.month=month
+                list.day=i
+                list.dorm=dorm
+                list.dorm_number=dorm_.dorm_number
+                list.save()
 
             elif(dorm=="학성사1" or dorm=="학성사3"):
                 if count==4:

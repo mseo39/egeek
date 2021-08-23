@@ -25,6 +25,7 @@ urlpatterns = [
     path('', data.views.main, name="main"),
     path('detail/<str:dorm>/<int:student_number>',data.views.detail, name="detail"),
     path('detail/<str:dorm>/select_out',data.views.select_out, name="select_out"),
+    path('detail/<str:dorm>/delete_date',data.views.delete_date, name="delete_date"),
     path('upload_file', data.views.upload_file, name="upload_file"),
     path('select_file', data.views.select_file, name="select_file"),
     path('delete_data', data.views.delete_data, name="delete_data"),

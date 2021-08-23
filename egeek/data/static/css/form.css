@@ -72,7 +72,6 @@ input:disabled {
 
 input:disabled +label {
     background: #dddddd;
-    text-indent: -9999px;
     overflow: hidden;
 
 }
@@ -206,8 +205,18 @@ button{
 }
 
 input[type="submit"] {
-    width: 100px;
+    width: 177px;
     height: 30px;
+}
+
+#move{
+    border: 1px solid #00BAED;
+}
+
+#move:hover{
+    background-color: #00BAED;
+    /* Green */
+    color: white;
 }
 
 button:hover, input[type="submit"]:hover {
