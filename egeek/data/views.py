@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import uploadfile_form
 import pandas as pd
-from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data, overnight_list,overnight_stay
+from .models import Uploadfile, dorm1_data, dorm2_data,dorm3_data, old_dorm1_data, old_dorm2_data,old_dorm3_data,global_dorm_data, overnight_list,overnight_stay,qrfile
 import qrcode
 from datetime import datetime
 import calendar
 from django.contrib.auth.decorators import login_required
+import openpyxl
 
 #테스트
 @login_required(login_url='/accounts/login/')
@@ -49,9 +50,14 @@ def upload_file(request):
     file_form=uploadfile_form()
     return render(request, 'main.html', {'file_form':file_form, 'dis':'disabled'})
 
+import openpyxl
+from openpyxl import load_workbook
+from openpyxl import Workbook
+from PIL import Image
+
 #엑셀에 있는 정보를 데이터베이스에 저장
 #링크, 기숙사명, 학번 정보를 가지고 있는 qr코드를 생성
-def excel_to_db(row,file):
+def excel_to_db(i,row,file):
     if(row[1][row[1].index[0]]=="향1"):
         dorm=dorm1_data()
     elif(row[1][row[1].index[0]]=="향2"):
@@ -82,9 +88,24 @@ def excel_to_db(row,file):
     qr.add_data('detail/'+row[1][row[1].index[0]]+'/')
     qr.add_data(row[1][row[1].index[2]])
     img = qr.make_image(fill_color="white", back_color="black")
-    dorm.qr_image=img.save('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
+    img.save('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
     dorm.qr_image='qr/{}_qr.png'.format(row[1][row[1].index[2]])
     dorm.save()
+
+    qr_file=qrfile()
+    width = 23
+    height = 23
+    img = Image.open(img)
+    img = img.resize((width,height),Image.NEAREST)
+    img.save('qr/{}_qr.png'.format(row[1][row[1].index[2]]))
+    wb = openpyxl.Workbook()
+    ws = wb.worksheets[0]
+    img = openpyxl.drawing.image.Image('qr/{}_qr.png'.format(row[1][row[1].index[2]]))
+    ws.add_image(img,'F2')
+    qr_file.file= wb.save('out.xlsx')
+    qr_file.title= 'out.xlsx'
+
+
 import os
 @login_required(login_url='/accounts/login/')
 def select_file(request):
@@ -98,10 +119,16 @@ def select_file(request):
                 file_.chk=1
                 file_.save()
                 directory="media/{}".format(file_.file)
-                df=pd.read_excel(directory, header=0)
+                
+                #df=pd.read_excel(directory, header=0
+                df=pd.read_excel(directory,header=None)
 
+                i=0
                 for row in df.iterrows():
-                    excel_to_db(row, file_.file)
+                    i=i+1
+                    excel_to_db(i,row, file_.file)
+                
+
             elif select=="파일 삭제":
                 Uploadfile.objects.filter(file=file_.file).delete()
                 os.remove("media/{}".format(file_.file))
@@ -293,3 +320,7 @@ def overnight(request):
               return render(request, 'result1.html', {'error':'날짜를 선택해주세요'})
 
     return render(request, 'result.html', {'dorm_data':dorm_, 'date':chk_date, 'month': month})
+
+    
+def qr(request):
+    return render(request, 'qr.html')

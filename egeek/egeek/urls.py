@@ -29,6 +29,7 @@ urlpatterns = [
     path('upload_file', data.views.upload_file, name="upload_file"),
     path('select_file', data.views.select_file, name="select_file"),
     path('delete_data', data.views.delete_data, name="delete_data"),
+    path('qr', data.views.qr, name="qr"),
     path('accounts/',include('accounts.urls')),
     path('manager/', accounts.views.manager_, name="manager"),
     path('overnight',data.views.overnight, name="overnight"),
