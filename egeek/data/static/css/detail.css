@@ -19,7 +19,7 @@ body {
 button {
     font-family: 'GmarketSansMedium';
     background-color: #95C51B;
-    font-size: 20px;
+    font-size: 15px;
     border: 0.1em solid #95C51B;
     border-radius: 0.5em;
     font-weight: bold;
@@ -33,8 +33,7 @@ button {
     overflow: hidden;
     z-index: 1;
     transition: 1s;
-    margin: 1em;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 9px 23px 0 rgba(0, 0, 0, 0.24);
+    margin: 2px;
 }
 
 button span {

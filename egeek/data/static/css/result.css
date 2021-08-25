@@ -55,7 +55,7 @@
     margin-bottom: 25px;
   }
   
-  button {
+  input[type=button], button {
     width: 100%;
     background: #73c242;
     border: transparent;
