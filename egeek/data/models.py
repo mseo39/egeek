@@ -18,9 +18,7 @@ class Uploadfile(models.Model):
         return self.title
 
 class qrfile(models.Model):
-    title=models.CharField(max_length=50)
     file=models.FileField(upload_to='file/')
-    chk=models.IntegerField(default=0,null=True)
 
     def delete(self, *args, **kargs):
         if self.file:

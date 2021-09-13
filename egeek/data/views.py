@@ -51,13 +51,13 @@ def upload_file(request):
     return render(request, 'main.html', {'file_form':file_form, 'dis':'disabled'})
 
 import openpyxl
-from openpyxl import load_workbook
-from openpyxl import Workbook
 from PIL import Image
+from docx import Document
+from docx.shared import Inches
 
 #엑셀에 있는 정보를 데이터베이스에 저장
 #링크, 기숙사명, 학번 정보를 가지고 있는 qr코드를 생성
-def excel_to_db(i,row,file):
+def excel_to_db(document,row,file):
     if(row[1][row[1].index[0]]=="향1"):
         dorm=dorm1_data()
     elif(row[1][row[1].index[0]]=="향2"):
@@ -84,7 +84,7 @@ def excel_to_db(i,row,file):
         border=4,
     )
 
-    qr.add_data('http://127.0.0.1:8000/')
+    qr.add_data('http://192.168.1.69:8000/')
     qr.add_data('detail/'+row[1][row[1].index[0]]+'/')
     qr.add_data(row[1][row[1].index[2]])
     img = qr.make_image(fill_color="white", back_color="black")
@@ -92,18 +92,12 @@ def excel_to_db(i,row,file):
     dorm.qr_image='qr/{}_qr.png'.format(row[1][row[1].index[2]])
     dorm.save()
 
-    qr_file=qrfile()
-    width = 23
-    height = 23
-    img = Image.open(img)
-    img = img.resize((width,height),Image.NEAREST)
-    img.save('qr/{}_qr.png'.format(row[1][row[1].index[2]]))
-    wb = openpyxl.Workbook()
-    ws = wb.worksheets[0]
-    img = openpyxl.drawing.image.Image('qr/{}_qr.png'.format(row[1][row[1].index[2]]))
-    ws.add_image(img,'F2')
-    qr_file.file= wb.save('out.xlsx')
-    qr_file.title= 'out.xlsx'
+    p = document.add_paragraph()
+    r = p.add_run()
+    r.add_text(row[1][row[1].index[0]])
+    r.add_text(row[1][row[1].index[1]])
+    r.add_text(str(row[1][row[1].index[2]]))
+    r.add_picture('media/qr/{}_qr.png'.format(row[1][row[1].index[2]]))
 
 
 import os
@@ -119,6 +113,8 @@ def select_file(request):
                 file_.chk=1
                 file_.save()
                 directory="media/{}".format(file_.file)
+                document = Document()
+                qr_file=qrfile()
                 
                 #df=pd.read_excel(directory, header=0
                 df=pd.read_excel(directory,header=None)
@@ -126,8 +122,10 @@ def select_file(request):
                 i=0
                 for row in df.iterrows():
                     i=i+1
-                    excel_to_db(i,row, file_.file)
-                
+                    excel_to_db(document,row, file_.file)
+                document.save('media/file/{}_qr.docx'.format(file))
+                qr_file.file='file/{}_qr.docx'.format(file)
+                qr_file.save()             
 
             elif select=="파일 삭제":
                 Uploadfile.objects.filter(file=file_.file).delete()
