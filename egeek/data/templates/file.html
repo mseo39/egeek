@@ -10,13 +10,14 @@
 
 <form class="upload_form" method="POST" action="select_file">
     {% csrf_token %}
-    <div class="scroll">
+    <table class="scroll">
     {% for files in not_upload_files %}
+    <td>
     <input class="option-input checkbox" type="checkbox" name="file[]" value={{files.file}}>
-    <label>{{files.title}}</label>
-    <br/>
+    <label for="{{files.file}}">{{files.title}}</label>
+    </td>
     {% endfor %}
-</div>
+    </table>
     <input type="submit" name="submit" value="데이터 올리기">
     <input type="submit" name="submit" value="파일 삭제">
 </form>

@@ -17,7 +17,8 @@
             <div class="form">
                 
               <form class="login-form" method="POST" action="{% url 'login' %}">
-             {% csrf_token %}   <input name="username" type="text" value="" placeholder="아이디 입력">
+             {% csrf_token %}   
+             <input name="username" type="text" value="" placeholder="아이디 입력">
                 <input name="password" type="password" value="" placeholder="비밀번호">
                 <input id="btn" type="submit" value="로그인">
                 <h4>{{error}}</h4>

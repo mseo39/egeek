@@ -67,12 +67,6 @@ input[type=file]::file-selector-button {
       margin-top: 6px;
     height:85.3vh;
     width: 100%;
-    background:
-     linear-gradient(to top left,transparent 49.8%,#00BAED 50%) 
-      left -1px top 0
-      /57% 100% 
-      no-repeat,
-      #3e79a8;
   }
 
   .upload_form{

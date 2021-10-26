@@ -13,14 +13,11 @@ html, body{
     margin-top: 6px;
     height:85.3vh;
     width: 100%;
-    background-color: #bad0b8;
-    background-image: -webkit-linear-gradient(right, #83ad18, #0096c0);
-    background-image: -moz-linear-gradient(right, #FC7864, #FDA366);
-    background-image: -o-linear-gradient(right, #FC7864, #FDA366);
-    background-image: -ms-linear-gradient(right, #FC7864, #FDA366);
-    background-image: linear-gradient(right, #FC7864, #FDA366);
   }
 
+  td{
+    display: block;
+  }
 
 
 .scroll{

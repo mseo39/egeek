@@ -9,13 +9,14 @@
 <form class="upload_form" method="POST" action="{% url 'signup' %}">
     {% csrf_token %}
     <div class="form">
-    <div class="scroll">
+    <table class="scroll">
     {% for manager in managers %}
+    <td>
     <input class="option-input checkbox" type="checkbox" name="username[]" value={{manager.username}}>{{manager.username}}
-    <br/>
     <input type="hidden" name="password[]" value={{manager.password}}>
+    </td>
     {% endfor %}
-</div>
+    </table>
 </div>
     <input type="submit" value="승인">
 </form>

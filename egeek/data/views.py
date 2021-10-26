@@ -116,16 +116,13 @@ def select_file(request):
                 document = Document()
                 qr_file=qrfile()
                 
-                #df=pd.read_excel(directory, header=0
-                df=pd.read_excel(directory,header=None)
+                df=pd.read_excel(directory, header=0)
+                #df=pd.read_excel(directory,header=None) 
 
                 i=0
                 for row in df.iterrows():
                     i=i+1
-                    excel_to_db(document,row, file_.file)
-                document.save('media/file/{}_qr.docx'.format(file))
-                qr_file.file='file/{}_qr.docx'.format(file)
-                qr_file.save()             
+                    excel_to_db(document,row, file_.file)           
 
             elif select=="파일 삭제":
                 Uploadfile.objects.filter(file=file_.file).delete()
