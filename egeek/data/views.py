@@ -197,7 +197,8 @@ def select_out(request, dorm):
 
         else:
             month=datetime.today().month
-            
+        
+        
         for i in c.itermonthdays(datetime.today().year,month):
             if i==0:
                 days.append([" ","disabled"])
@@ -206,8 +207,11 @@ def select_out(request, dorm):
 
         already=overnight_stay.objects.filter(month=month)
         index=0
-        while(i!=0):
+        for i in c.itermonthdays(datetime.today().year,month):
+            if i!=0:
+                break
             index=index+1
+
         for j in already:
             days[index+j.day-1][1]="disabled"
 
@@ -243,8 +247,7 @@ def delete_date(request, dorm):
         else:
             month=datetime.today().month
             
-        c=c.itermonthdays(datetime.today().year,month)
-        for i in c:
+        for i in c.itermonthdays(datetime.today().year,month):
             if i==0:
                 days.append([" ","disabled"])
             else:
@@ -255,8 +258,13 @@ def delete_date(request, dorm):
         already=overnight_stay.objects.filter(month=month)
         
         index=0
-        while(i!=0):
+
+        for i in c.itermonthdays(datetime.today().year,month):
+            if i!=0:
+                break
             index=index+1
+        print(index)
+
         for j in already:
             days[index+j.day-1][1]=" "
 
