@@ -1,3 +1,4 @@
+from django.db import connection
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import uploadfile_form
 import pandas as pd
@@ -8,9 +9,34 @@ import calendar
 from django.contrib.auth.decorators import login_required
 import openpyxl
 
+from socket import *
+from threading import *
+
 #테스트
 @login_required(login_url='/accounts/login/')
 def main(request):
+    def serverRecv():
+        while True:
+            clientMsg=connectionSocket.recv(1024)
+            print("[클라이언트]"+clientMsg.decode("utf8")+"\n")
+                
+    print("서버 TCP 초기화...")
+    servername='192.168.1.69'
+    serverPort=8000
+    serverSocket=socket(AF_INET,SOCK_STREAM)
+    #serverSocket.setsockopt(SOL_SOCKET,SO_REUSEADDR,1 )
+
+    serverSocket.bind((servername,serverPort))
+    serverSocket.listen(1)
+    connectionSocket, addr=serverSocket.accept()
+    print("클라이언트 연결됨\n",addr,"\n")
+
+    Thread(target=serverRecv).start()
+
+    while True:
+        msg=input()
+        connectionSocket.send(msg.encode("utf8"))
+    connectionSocket.close()
     return render(request, 'home.html')
 
 #데이터베이스에 칼럼 가져오기
@@ -84,7 +110,7 @@ def excel_to_db(document,row,file):
         border=4,
     )
 
-    qr.add_data('http://192.168.1.69:8000/')
+    qr.add_data('http://192.168.0.26:8000/')
     qr.add_data('detail/'+row[1][row[1].index[0]]+'/')
     qr.add_data(row[1][row[1].index[2]])
     img = qr.make_image(fill_color="white", back_color="black")
@@ -252,8 +278,6 @@ def delete_date(request, dorm):
                 days.append([" ","disabled"])
             else:
                 days.append([i,"disabled"])
-        
-        
 
         already=overnight_stay.objects.filter(month=month)
         
@@ -272,6 +296,8 @@ def delete_date(request, dorm):
 
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib import messages
+from socket import *
+from threading import *
 #외박 form
 #overnight_stay_month, day, dorm, Dorm_number
 def overnight(request):
@@ -319,6 +345,8 @@ def overnight(request):
                         list.dorm=dorm
                         list.dorm_number=dorm_.dorm_number
                         list.save()
+
+
         else:
               return render(request, 'result1.html', {'error':'날짜를 선택해주세요'})
 
