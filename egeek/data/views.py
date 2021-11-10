@@ -8,35 +8,12 @@ from datetime import datetime
 import calendar
 from django.contrib.auth.decorators import login_required
 import openpyxl
-
 from socket import *
 from threading import *
 
 #테스트
 @login_required(login_url='/accounts/login/')
 def main(request):
-    def serverRecv():
-        while True:
-            clientMsg=connectionSocket.recv(1024)
-            print("[클라이언트]"+clientMsg.decode("utf8")+"\n")
-                
-    print("서버 TCP 초기화...")
-    servername='192.168.1.69'
-    serverPort=8000
-    serverSocket=socket(AF_INET,SOCK_STREAM)
-    #serverSocket.setsockopt(SOL_SOCKET,SO_REUSEADDR,1 )
-
-    serverSocket.bind((servername,serverPort))
-    serverSocket.listen(1)
-    connectionSocket, addr=serverSocket.accept()
-    print("클라이언트 연결됨\n",addr,"\n")
-
-    Thread(target=serverRecv).start()
-
-    while True:
-        msg=input()
-        connectionSocket.send(msg.encode("utf8"))
-    connectionSocket.close()
     return render(request, 'home.html')
 
 #데이터베이스에 칼럼 가져오기
@@ -155,7 +132,7 @@ def select_file(request):
                 os.remove("media/{}".format(file_.file))
 
         return redirect("select_file")
-        
+
     not_upload_files=Uploadfile.objects.filter(chk=0)
     upload_files=Uploadfile.objects.filter(chk=1)
     return render(request, 'file.html', {'upload_files':upload_files,'not_upload_files':not_upload_files})
@@ -231,7 +208,7 @@ def select_out(request, dorm):
             else:
                 days.append([i," "])
 
-        already=overnight_stay.objects.filter(month=month)
+        already=overnight_stay.objects.filter(month=month,student_number=student_number)
         index=0
         for i in c.itermonthdays(datetime.today().year,month):
             if i!=0:
@@ -279,7 +256,7 @@ def delete_date(request, dorm):
             else:
                 days.append([i,"disabled"])
 
-        already=overnight_stay.objects.filter(month=month)
+        already=overnight_stay.objects.filter(month=month,student_number=student_number)
         
         index=0
 
@@ -287,7 +264,6 @@ def delete_date(request, dorm):
             if i!=0:
                 break
             index=index+1
-        print(index)
 
         for j in already:
             days[index+j.day-1][1]=" "
@@ -352,6 +328,33 @@ def overnight(request):
 
     return render(request, 'result.html', {'dorm_data':dorm_, 'date':chk_date, 'month': month})
 
+def overnight_call(request):
     
+    list=overnight_stay.objects.filter(month=datetime.today().month,day=datetime.today().day)
+    list.delete()
+    
+    return list
+
 def qr(request):
     return render(request, 'qr.html')
+
+import json
+from django.http import JsonResponse
+
+def call(request,option):
+    a={}
+    if (option=="outing"):
+        a={
+        "외출":22,
+        "호실":201,
+        "호실1":202}
+        print("외출")
+    elif(option=="overnight"):
+        a={
+        "외박":22,
+        "호실":201,
+        "호실1":202}
+        print("외박")
+
+    a_json=json.dumps(a)
+    return HttpResponse(a_json)

@@ -30,6 +30,7 @@ urlpatterns = [
     path('select_file', data.views.select_file, name="select_file"),
     path('delete_data', data.views.delete_data, name="delete_data"),
     path('qr', data.views.qr, name="qr"),
+    path('call/<str:option>', data.views.call, name="call"),
     path('accounts/',include('accounts.urls')),
     path('manager/', accounts.views.manager_, name="manager"),
     path('overnight',data.views.overnight, name="overnight"),
