@@ -87,7 +87,7 @@ def excel_to_db(document,row,file):
         border=4,
     )
 
-    qr.add_data('http://192.168.0.26:8000/')
+    qr.add_data('http://192.168.0.213:8000/')
     qr.add_data('detail/'+row[1][row[1].index[0]]+'/')
     qr.add_data(row[1][row[1].index[2]])
     img = qr.make_image(fill_color="white", back_color="black")
@@ -120,7 +120,7 @@ def select_file(request):
                 qr_file=qrfile()
                 
                 df=pd.read_excel(directory, header=0)
-                #df=pd.read_excel(directory,header=None) 
+                #df=pd.read_excel(directory,header=None)
 
                 i=0
                 for row in df.iterrows():
@@ -170,6 +170,16 @@ def delete_data(request):
 
 from django.views.decorators.csrf import csrf_exempt
 
+#외출
+outing={}
+
+def outing_call(dorm, dorm_number, studet_number):
+    outing[studet_number]=str(dorm)+","+str(dorm_number)
+    
+    
+def outing_call1():
+    return outing
+    
 @csrf_exempt
 def select_out(request, dorm):
     if request.method=='POST':
@@ -186,6 +196,9 @@ def select_out(request, dorm):
         c= calendar.TextCalendar(calendar.SUNDAY)
 
         if(select=="외출"):
+            #호출
+            outing_call(dorm_.dorm, dorm_.dorm_number,dorm_.student_number)
+
             return render(request, 'outing.html',{'dorm_data':dorm_})
         #외박form
         elif(select=="감소"):
@@ -328,12 +341,6 @@ def overnight(request):
 
     return render(request, 'result.html', {'dorm_data':dorm_, 'date':chk_date, 'month': month})
 
-def overnight_call(request):
-    
-    list=overnight_stay.objects.filter(month=datetime.today().month,day=datetime.today().day)
-    list.delete()
-    
-    return list
 
 def qr(request):
     return render(request, 'qr.html')
@@ -342,19 +349,31 @@ import json
 from django.http import JsonResponse
 
 def call(request,option):
-    a={}
+    
+    #외출 신청이 왔을 때
     if (option=="outing"):
-        a={
-        "외출":22,
-        "호실":201,
-        "호실1":202}
-        print("외출")
-    elif(option=="overnight"):
-        a={
-        "외박":22,
-        "호실":201,
-        "호실1":202}
-        print("외박")
+        outing1=outing_call1()
+        #외출 데이터를 보내줌
+        a_json=json.dumps(outing1)
+        print(outing1)
+        #보낸데이터는 삭제
+        #for key in outing1.items():
+         #   del outing[key]
 
-    a_json=json.dumps(a)
+        print("외출")
+    
+    #외박신청이 왔을 때
+    elif(option=="overnight"):
+        overnight={}
+        list=overnight_list.objects.filter(month=datetime.today().month,day=datetime.today().day)
+
+        for i in list:
+            overnight[i.dorm]=i.dorm_number
+        #외박 데이터를 보내줌
+        a_json=json.dumps(overnight)
+        #보낸데이터는 삭제
+        list.delete()
+
+        print("외박")
+        
     return HttpResponse(a_json)
